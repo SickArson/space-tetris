@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, minimum-scale=1">
-  <title>Space Tetris – Mobile Optimized</title>
+  <title>Space Tetris – Mobile Fixed</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
 
@@ -341,11 +341,23 @@ function gameOver(){
 
 document.getElementById("restartBtn").onclick = ()=>location.reload();
 
-left.onclick = () => { if(!collides(px-1,py,piece)) px--; };
-right.onclick = () => { if(!collides(px+1,py,piece)) px++; };
-rotate.onclick = () => { let r=rotate(piece); if(!collides(px,py,r)) piece=r; };
-down.onclick = () => { py++; if(collides(px,py,piece)) py--; };
+// ✅ Correctly wired buttons using IDs
+document.getElementById("left").onclick = () => {
+  if (!collides(px - 1, py, piece)) px--;
+};
+document.getElementById("right").onclick = () => {
+  if (!collides(px + 1, py, piece)) px++;
+};
+document.getElementById("rotate").onclick = () => {
+  const r = rotate(piece);
+  if (!collides(px, py, r)) piece = r;
+};
+document.getElementById("down").onclick = () => {
+  py++;
+  if (collides(px, py, piece)) py--;
+};
 
+// ✅ Touch gesture support
 let touchStartX = 0, touchStartY = 0;
 canvas.addEventListener("touchstart", (e) => {
   const t = e.touches[0];
@@ -358,14 +370,15 @@ canvas.addEventListener("touchend", (e) => {
   const dy = t.clientY - touchStartY;
 
   if (Math.abs(dx) > Math.abs(dy)) {
-    if (dx > 20) right.onclick();
-    else if (dx < -20) left.onclick();
+    if (dx > 20) document.getElementById("right").onclick();
+    else if (dx < -20) document.getElementById("left").onclick();
   } else {
-    if (dy > 20) down.onclick();
-    else if (dy < -20) rotate.onclick();
+    if (dy > 20) document.getElementById("down").onclick();
+    else if (dy < -20) document.getElementById("rotate").onclick();
   }
 });
 
+// ✅ Fullscreen toggle
 document.getElementById("fullscreenBtn").onclick = () => {
   const elem = document.documentElement;
   if (!document.fullscreenElement) {
