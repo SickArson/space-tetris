@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, minimum-scale=1">
-  <title>Space Tetris – Responsive Edition</title>
+  <title>Space Tetris – Mobile Optimized</title>
   <style>
-    /* RESET */
     * { margin:0; padding:0; box-sizing:border-box; }
 
-    /* BODY/GENERAL LAYOUT */
     body {
       background:black;
       font-family:Arial, sans-serif;
@@ -19,11 +17,9 @@
       display:flex;
       justify-content:center;
       align-items:center;
-      /* Previene il ritardo di 300ms e l'evidenziazione su mobile */
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* START SCREEN */
     #start-screen {
       position:absolute;
       inset:0;
@@ -52,17 +48,15 @@
       color:#6fbaff;
       background:black;
       box-shadow:0 0 4vw #6fbaff;
-      cursor:pointer; /* Aggiunto cursore */
     }
 
-    /* GAME CONTAINER */
     #game-container {
       display:none;
       flex-direction:column;
       align-items:center;
       width:100vw;
       height:100vh;
-      padding:1vh 0; /* Ridotto padding-top e aggiunto padding-bottom */
+      padding-top:2vh;
     }
 
     #ui {
@@ -70,65 +64,53 @@
       margin-bottom:1vh;
       color:white;
       text-align:center;
-      padding:0 2vw; /* Leggero padding per il testo */
     }
 
-    /* CANVAS TETRIS */
     #tetris {
-      width:90vw;
-      max-width:430px;
-      aspect-ratio:1/2;
-      border:0.8vw solid #6fbaff;
+      width:95vw;
+      max-height:70vh;
+      aspect-ratio:10/20;
+      border:1vw solid #6fbaff;
       background:black;
-      box-shadow:0 0 3vw #6fbaff;
-      touch-action:none; /* Importante per i controlli touch */
+      box-shadow:0 0 1.5vw #6fbaff;
+      touch-action:none;
     }
 
-    /* CONTROLLI */
-    #controls {
-      display:grid;
-      /* Layout a griglia 2x3 per allineare Drop e Hard Drop */
-      grid-template-columns: repeat(4, 1fr); 
-      grid-template-areas: 
-        ". rotate . drop"
-        "left drop right hard-drop"; 
-      gap:3vw; /* Ridotto il gap per far stare tutti i pulsanti */
-      width:90vw;
-      max-width:430px;
+    #fullscreenBtn {
       margin-top:2vh;
-      padding-bottom:3vh;
+      margin-bottom:1vh;
+      font-size:6vw;
+      width:14vw;
+      height:14vw;
+      max-width:70px;
+      max-height:70px;
     }
 
-    /* Mappatura dei pulsanti nella griglia */
-    #left { grid-area: left; }
-    #rotate { grid-area: rotate; }
-    #right { grid-area: right; }
-    #down { grid-area: drop; }
-    #hard-drop { grid-area: hard-drop; } /* Nuovo pulsante */
+    #controls {
+      display:flex;
+      justify-content:space-around;
+      flex-wrap:wrap;
+      width:100%;
+      max-width:480px;
+      padding:1vh 0;
+    }
 
     .control-btn {
-      /* Misure relative per mantenere la responsività */
-      width:100%; 
-      height:14vw; 
-      max-height:80px;
+      width:18vw;
+      height:18vw;
+      max-width:90px;
+      max-height:90px;
       background:#111;
       border:0.8vw solid #6fbaff;
       border-radius:2vw;
-      font-size:7vw;
+      font-size:8vw;
       color:#6fbaff;
       display:flex;
       justify-content:center;
       align-items:center;
       user-select:none;
       box-shadow:0 0 3vw #6fbaff;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      line-height:1; /* Per l'allineamento verticale del testo/emoji */
-    }
-
-    /* Stile per i pulsanti larghi come il Down e Hard Drop */
-    #down, #hard-drop {
-      height: 100%;
+      margin:1vw;
     }
 
     .control-btn:active {
@@ -136,19 +118,6 @@
       filter:brightness(1.4);
     }
 
-    /* PULSANTE FULLSCREEN */
-    #fullscreenBtn {
-      font-size:5vw;
-      width:12vw;
-      height:12vw;
-      max-width:70px;
-      max-height:70px;
-      margin-top:2vh;
-      /* Per rimuoverlo dalla griglia dei controlli principali */
-      grid-area: unset !important;
-    }
-
-    /* GAME OVER SCREEN */
     #gameover-screen {
       position:absolute;
       inset:0;
@@ -158,7 +127,6 @@
       justify-content:center;
       align-items:center;
       z-index:20;
-      color:white; /* Aggiunto colore testo per leggibilità */
       text-shadow:0 0 8px #6fbaff;
     }
 
@@ -171,17 +139,18 @@
       color:#6fbaff;
       margin-top:3vh;
       box-shadow:0 0 4vw #6fbaff;
-      cursor:pointer;
     }
   </style>
 </head>
 <body>
 
+<!-- START SCREEN -->
 <div id="start-screen">
   <div id="start-logo">SPACE TETRIS</div>
   <div id="startBtn">START</div>
 </div>
 
+<!-- GAME CONTAINER -->
 <div id="game-container">
   <div id="ui">
     Score: <span id="score">0</span> |
@@ -191,16 +160,17 @@
 
   <canvas id="tetris"></canvas>
 
+  <div id="fullscreenBtn" class="control-btn">⛶</div>
+
   <div id="controls">
     <div class="control-btn" id="left">⬅️</div>
     <div class="control-btn" id="rotate">🔄</div>
     <div class="control-btn" id="right">➡️</div>
     <div class="control-btn" id="down">⬇️</div>
-    <div class="control-btn" id="hard-drop">⬇️⬇️</div> </div>
-
-  <div id="fullscreenBtn" class="control-btn">⛶</div>
+  </div>
 </div>
 
+<!-- GAME OVER SCREEN -->
 <div id="gameover-screen">
   <div style="font-size:10vw; margin-bottom:3vh; letter-spacing:1vw;">GAME OVER</div>
   <div style="font-size:5vw;">Score: <span id="final-score"></span></div>
@@ -221,44 +191,30 @@ let gridW=10, gridH=20, block;
 let score=0, level=1, time=0;
 let grid, piece, px, py;
 let last=0, drop=0, paused=true;
-// Variabili per la caduta continua
-let downInterval = null;
-let dropDelay = 80; // Velocità di caduta veloce in ms
 
 const shapes=[
   [[1,1,1,1]],
   [[1,1],[1,1]],
   [[0,1,0],[1,1,1]],
-  [[1,0,0],[1,0,0],[1,1,0]], // Correzione per la 'L'
-  [[0,0,1],[0,0,1],[0,1,1]], // Correzione per la 'J'
-  [[0,1,1],[1,1,0],[0,0,0]], // La 'S'
-  [[1,1,0],[0,1,1],[0,0,0]] // La 'Z'
+  [[1,0],[1,0],[1,1]],
+  [[0,1],[0,1],[1,1]]
 ];
 
-const colors=["#6fbaff","#94ccff","#c7e5ff","#ffffff","#ff6f6f","#ffcc6f","#6fff6f"]; // Aggiunti più colori
+const colors=["#6fbaff","#94ccff","#c7e5ff","#ffffff"];
 
 function startGame(){
   canvas = document.getElementById("tetris");
   ctx = canvas.getContext("2d");
 
-  // Ricalcola le dimensioni della tela ad ogni avvio (importante per rotazione schermo)
-  function resizeCanvas() {
-    canvas.width = canvas.getBoundingClientRect().width;
-    canvas.height = canvas.width * 2;
-    block = canvas.width / gridW;
-    draw(); // Ridisegna dopo il ridimensionamento
-  }
-  
-  // Ascolta l'evento di ridimensionamento della finestra (e rotazione)
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas(); // Esegui subito all'avvio
+  canvas.width = canvas.getBoundingClientRect().width;
+  canvas.height = canvas.width * 2;
+  block = canvas.width / gridW;
 
   initGrid();
   newPiece();
   paused = false;
   update(0);
 
-  // Inizializza il timer
   setInterval(() => {
     if (!paused) {
       time++;
@@ -269,121 +225,58 @@ function startGame(){
 
 function initGrid(){
   grid=Array(gridH).fill().map(()=>Array(gridW).fill(0));
-  score=0; level=1; time=0;
-  document.getElementById("score").textContent=score;
-  document.getElementById("level").textContent=level;
-  document.getElementById("time").textContent=time;
 }
 
 function newPiece(){
-  // Seleziona una forma casuale e le assegna un colore casuale (indice > 0)
-  const shapeIndex = Math.random() * shapes.length | 0;
-  // Usiamo l'indice della forma + 1 per il colore (l'indice 0 è 0, che è "vuoto")
-  piece={
-    shape: shapes[shapeIndex],
-    colorIndex: (shapeIndex % (colors.length - 1)) + 1 // Assicura un indice colore tra 1 e max
-  };
+  piece=shapes[Math.random()*shapes.length|0];
   px=3; py=0;
 }
 
 function rotate(p){
-  return p.map((_,i)=>p.map(r=>r[i]).reverse());
+  return p[0].map((_,i)=>p.map(r=>r[i]).reverse());
 }
 
 function collides(nx,ny,p){
   for(let y=0;y<p.length;y++){
     for(let x=0;x<p[y].length;x++){
-      if(p[y][x]){
-        const nextGridX = nx + x;
-        const nextGridY = ny + y;
-        // Controllo fuori dai bordi O collisione con un blocco fisso
-        if(nextGridX < 0 || nextGridX >= gridW || nextGridY >= gridH || (nextGridY >= 0 && grid[nextGridY][nextGridX] !== 0)) {
-          return true;
-        }
-      }
+      if(p[y][x] &&
+        (nx+x<0||nx+x>=gridW||ny+y>=gridH||grid[ny+y][nx+x])) return true;
     }
   }
   return false;
 }
 
 function merge(){
-  piece.shape.forEach((r,y)=>r.forEach((v,x)=>{
-    if(v) grid[py+y][px+x]=piece.colorIndex; // Salva l'indice del colore nella griglia
+  piece.forEach((r,y)=>r.forEach((v,x)=>{
+    if(v) grid[py+y][px+x]=1;
   }));
 }
 
 function clearLines(){
-  let cleared=0;
   for(let y=gridH-1;y>=0;y--){
-    if(grid[y].every(v=>v!==0)){ // Controlla se ogni cella è piena (non 0)
+    if(grid[y].every(v=>v)){
       grid.splice(y,1);
       grid.unshift(Array(gridW).fill(0));
-      cleared++;
-      y++; // Controlla di nuovo la riga appena spostata
+      score+=100;
+      level=Math.floor(score/500)+1;
     }
-  }
-
-  if(cleared > 0){
-    // Sistema di punteggio Tetris: 100, 300, 500, 800 per 1, 2, 3, 4 linee
-    score += [0, 100, 300, 500, 800][cleared] * level;
-    level = Math.floor(score/500)+1; // Aumenta il livello
   }
   document.getElementById("score").textContent=score;
   document.getElementById("level").textContent=level;
 }
 
-function hardDrop() {
-  if (paused) return;
-  let linesDropped = 0;
-  // Trova la posizione di caduta
-  while(!collides(px, py + 1, piece.shape)) {
-    py++;
-    linesDropped++;
-  }
-  // Punti bonus per l'hard drop (ad esempio 2 punti per riga)
-  score += linesDropped * 2;
-  document.getElementById("score").textContent = score;
-
-  // Finalizza il pezzo
-  merge();
-  clearLines();
-  newPiece();
-
-  // Controllo Game Over dopo l'hard drop (il pezzo deve essere posizionato in alto)
-  if(collides(px,py,piece.shape)){
-    gameOver();
-  }
-}
-
-// Stelle per lo sfondo (migliorata per responsività)
 let stars=[];
 for(let i=0;i<80;i++){
-  // Le coordinate delle stelle sono normalizzate (0-1) e poi moltiplicate per le dimensioni della tela
-  stars.push({
-    nx: Math.random(), 
-    ny: Math.random(), 
-    s: Math.random()*2 + 1, // Dimensione stella
-    sp: 0.4 + Math.random()*0.5 // Velocità
-  });
+  stars.push({x:Math.random()*300,y:Math.random()*600,s:Math.random()*2,sp:0.4+Math.random()*0.5});
 }
 
 function drawStars(){
   ctx.fillStyle="white";
   for(let s of stars){
-    const x = s.nx * canvas.width;
-    const y = s.ny * canvas.height;
-
     ctx.globalAlpha=0.3;
-    ctx.fillRect(x,y,s.s,s.s);
-    
-    // Aggiorna la posizione in base alla velocità
-    s.ny += s.sp / canvas.height; // La velocità è relativa all'altezza della tela
-    
-    // Riposiziona in alto se esce dal fondo
-    if(s.ny > 1){
-      s.ny = 0; 
-      s.nx = Math.random();
-    }
+    ctx.fillRect(s.x,s.y,s.s,s.s);
+    s.y+=s.sp;
+    if(s.y>canvas.height){s.y=0; s.x=Math.random()*canvas.width;}
   }
   ctx.globalAlpha=1;
 }
@@ -392,22 +285,19 @@ function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   drawStars();
 
-  // Disegna la griglia
   for(let y=0;y<gridH;y++){
     for(let x=0;x<gridW;x++){
       if(grid[y][x]){
-        // Usa l'indice salvato per il colore
-        ctx.fillStyle=colors[grid[y][x]]; 
+        ctx.fillStyle=colors[(x+y)%4];
         ctx.fillRect(x*block,y*block,block-1,block-1);
       }
     }
   }
 
-  // Disegna il pezzo corrente
-  piece.shape.forEach((r,y)=>
+  piece.forEach((r,y)=>
     r.forEach((v,x)=>{
       if(v){
-        ctx.fillStyle=colors[piece.colorIndex];
+        ctx.fillStyle=colors[(x+y)%4];
         ctx.fillRect((px+x)*block,(py+y)*block,block-1,block-1);
       }
     })
@@ -422,19 +312,17 @@ function update(t){
   last=t;
   drop+=d;
 
-  // La velocità di caduta aumenta con il livello
-  const dropRate = 900 - level*60; 
-  if(drop > dropRate < 100 ? 100 : dropRate){ // Minimo 100ms
+  if(drop > 900 - level*60){
     py++;
     drop=0;
 
-    if(collides(px,py,piece.shape)){
+    if(collides(px,py,piece)){
       py--;
       merge();
       clearLines();
       newPiece();
 
-      if(collides(px,py,piece.shape)){
+      if(collides(px,py,piece)){
         gameOver();
         return;
       }
@@ -445,8 +333,6 @@ function update(t){
 
 function gameOver(){
   paused=true;
-  clearInterval(downInterval);
-  downInterval = null;
   document.getElementById("final-score").textContent=score;
   document.getElementById("final-level").textContent=level;
   document.getElementById("final-time").textContent=time;
@@ -455,116 +341,41 @@ function gameOver(){
 
 document.getElementById("restartBtn").onclick = ()=>location.reload();
 
-/* --- GESTIONE CONTROLLI AGGIORNATA --- */
+left.onclick = () => { if(!collides(px-1,py,piece)) px--; };
+right.onclick = () => { if(!collides(px+1,py,piece)) px++; };
+rotate.onclick = () => { let r=rotate(piece); if(!collides(px,py,r)) piece=r; };
+down.onclick = () => { py++; if(collides(px,py,piece)) py--; };
 
-// Funzione per la caduta singola (usata da Down e Swipe)
-function softDropOnce() {
-  if (collides(px, py + 1, piece.shape)) {
-    // Toccato il fondo, finalizza il pezzo
-    merge();
-    clearLines();
-    newPiece();
-    if(collides(px,py,piece.shape)){
-      gameOver();
-    }
-  } else {
-    py++;
-  }
-}
-
-// Hard Drop
-document.getElementById("hard-drop").onclick = hardDrop;
-
-// Funzioni per l'intervallo di caduta continua
-function startSoftDrop() {
-  if (paused || downInterval !== null) return;
-  downInterval = setInterval(softDropOnce, dropDelay);
-}
-
-function stopSoftDrop() {
-  if (downInterval !== null) {
-    clearInterval(downInterval);
-    downInterval = null;
-  }
-}
-
-// Controllo Down
-const downBtn = document.getElementById("down");
-downBtn.addEventListener("mousedown", startSoftDrop);
-downBtn.addEventListener("mouseup", stopSoftDrop);
-downBtn.addEventListener("mouseleave", stopSoftDrop); // Nel caso in cui si trascini il dito fuori
-downBtn.addEventListener("touchstart", (e) => {
-  e.preventDefault(); // Previene il ritardo e altre interazioni
-  startSoftDrop();
-}, { passive: false });
-downBtn.addEventListener("touchend", stopSoftDrop);
-downBtn.addEventListener("touchcancel", stopSoftDrop);
-
-
-// Controlli semplici
-document.getElementById("left").onclick = () => { if(!collides(px-1,py,piece.shape)) px--; };
-document.getElementById("right").onclick = () => { if(!collides(px+1,py,piece.shape)) px++; };
-document.getElementById("rotate").onclick = () => { 
-  let r=rotate(piece.shape); 
-  // Implementata una semplice "Kick" per la rotazione vicino ai bordi
-  if(!collides(px,py,r)) {
-    piece.shape=r;
-  } else if(!collides(px-1,py,r)) { // Sposta a destra se bloccato a sinistra
-    px--; piece.shape=r;
-  } else if(!collides(px+1,py,r)) { // Sposta a sinistra se bloccato a destra
-    px++; piece.shape=r;
-  }
-};
-
-// TOUCH SWIPE SUL CANVAS
 let touchStartX = 0, touchStartY = 0;
-const SWIPE_THRESHOLD = 30; // Soglia in pixel per considerare uno swipe
 canvas.addEventListener("touchstart", (e) => {
-  if (paused) return;
   const t = e.touches[0];
   touchStartX = t.clientX;
   touchStartY = t.clientY;
 });
 canvas.addEventListener("touchend", (e) => {
-  if (paused) return;
   const t = e.changedTouches[0];
   const dx = t.clientX - touchStartX;
   const dy = t.clientY - touchStartY;
 
-  // Assicurati che lo swipe sia abbastanza lungo
-  if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD) return;
-
-  // Swipe orizzontale vs verticale
   if (Math.abs(dx) > Math.abs(dy)) {
-    // Swipe Orizzontale (Sposta)
-    if (dx > SWIPE_THRESHOLD) document.getElementById("right").onclick();
-    else if (dx < -SWIPE_THRESHOLD) document.getElementById("left").onclick();
+    if (dx > 20) right.onclick();
+    else if (dx < -20) left.onclick();
   } else {
-    // Swipe Verticale (Hard Drop o Ruota)
-    if (dy > SWIPE_THRESHOLD) hardDrop(); // Hard Drop su swipe giù
-    else if (dy < -SWIPE_THRESHOLD) document.getElementById("rotate").onclick(); // Rotazione su swipe su
+    if (dy > 20) down.onclick();
+    else if (dy < -20) rotate.onclick();
   }
 });
 
-// FULLSCREEN TOGGLE
 document.getElementById("fullscreenBtn").onclick = () => {
   const elem = document.documentElement;
   if (!document.fullscreenElement) {
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-    } else if (elem.webkitRequestFullscreen) {
-      elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) {
-      elem.msRequestFullscreen();
-    }
+    elem.requestFullscreen?.();
+    elem.webkitRequestFullscreen?.();
+    elem.msRequestFullscreen?.();
   } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    }
+    document.exitFullscreen?.();
+    document.webkitExitFullscreen?.();
+    document.msExitFullscreen?.();
   }
 };
 </script>
