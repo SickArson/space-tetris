@@ -5,122 +5,134 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-<title>Space Tetris – Full Mobile Version</title>
+<title>Space Tetris – Responsive Edition</title>
 
 <style>
+  /* RESET */
+  * { margin:0; padding:0; box-sizing:border-box; }
+
   body {
-    margin: 0;
-    background: black;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
-    color: white;
+    background:black;
+    font-family:Arial, sans-serif;
+    overflow:hidden;
+    height:100vh;
+    width:100vw;
+    display:flex;
+    justify-content:center;
+    align-items:center;
   }
 
+  /* ---------------- START SCREEN ---------------- */
   #start-screen {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    background: radial-gradient(#020617, #000);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 5;
+    position:absolute;
+    inset:0;
+    background:radial-gradient(#020617,#000);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:10;
   }
 
   #start-logo {
-    font-size: 40px;
-    color: #6fbaff;
-    text-shadow: 0 0 6px #6fbaff, 0 0 14px #3d7bff;
-    letter-spacing: 4px;
-    margin-bottom: 30px;
+    font-size:8vw;
+    color:#6fbaff;
+    text-shadow:0 0 8px #6fbaff,0 0 18px #3d7bff;
+    letter-spacing:0.8vw;
+    margin-bottom:4vh;
   }
 
   #startBtn {
-    width: 180px;
-    padding: 14px;
-    border: 3px solid #6fbaff;
-    color: #6fbaff;
-    background: #000;
-    font-size: 26px;
-    text-align: center;
-    border-radius: 6px;
-    box-shadow: 0 0 20px #6fbaff;
-    image-rendering: pixelated;
+    padding:3vw 7vw;
+    border:0.8vw solid #6fbaff;
+    border-radius:2vw;
+    font-size:6vw;
+    text-align:center;
+    color:#6fbaff;
+    background:black;
+    box-shadow:0 0 4vw #6fbaff;
   }
 
+  /* ---------------- GAME CONTAINER ---------------- */
   #game-container {
-    display: none;
-    width: 100vw;
-    height: 100vh;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 10px;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    width:100vw;
+    height:100vh;
+    padding-top:2vh;
   }
 
-  #tetris {
-    width: 92vw;
-    max-width: 420px;
-    height: auto;
-    border: 4px solid #6fbaff;
-    background: black;
-    box-shadow: 0 0 20px #6fbaff;
-  }
-
+  /* SCORE UI */
   #ui {
-    margin: 10px 0 6px;
-    font-size: 18px;
-    text-align: center;
+    font-size:4vw;
+    margin-bottom:1vh;
+    color:white;
+    text-align:center;
   }
 
+  /* CANVAS RESPONSIVE */
+  #tetris {
+    width:90vw;
+    max-width:430px;
+    aspect-ratio:1/2; /* 🔥 Magic responsiveness */
+    border:0.8vw solid #6fbaff;
+    background:black;
+    box-shadow:0 0 3vw #6fbaff;
+  }
+
+  /* ---------------- TOUCH CONTROLS ---------------- */
   #controls {
-    display: flex;
-    justify-content: center;
-    gap: 18px;
-    margin-top: 12px;
+    display:flex;
+    justify-content:center;
+    gap:4vw;
+    margin-top:2vh;
   }
 
   .control-btn {
-    width: 65px;
-    height: 65px;
-    background: #111;
-    border: 3px solid #6fbaff;
-    border-radius: 10px;
-    font-size: 32px;
-    color: #6fbaff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 12px #6fbaff;
-    user-select: none;
+    width:14vw;
+    height:14vw;
+    max-width:80px;
+    max-height:80px;
+    background:#111;
+    border:0.8vw solid #6fbaff;
+    border-radius:2vw;
+    font-size:7vw;
+    color:#6fbaff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    user-select:none;
+    box-shadow:0 0 3vw #6fbaff;
   }
 
-  /* GAME OVER SCREEN */
+  .control-btn:active {
+    transform:scale(0.92);
+    filter:brightness(1.4);
+  }
+
+  /* ---------------- GAME OVER SCREEN ---------------- */
   #gameover-screen {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: radial-gradient(#000428,#004e92);
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-shadow: 0 0 8px #6fbaff;
-    z-index: 10;
+    position:absolute;
+    inset:0;
+    background:radial-gradient(#000428,#004e92);
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:20;
+    text-shadow:0 0 8px #6fbaff;
   }
 
   #restartBtn {
-    width: 180px;
-    padding: 14px;
-    border: 3px solid #6fbaff;
-    background: #000;
-    color: #6fbaff;
-    text-align: center;
-    border-radius: 6px;
-    box-shadow: 0 0 20px #6fbaff;
-    font-size: 26px;
-    margin-top: 30px;
+    padding:3vw 7vw;
+    border:0.8vw solid #6fbaff;
+    border-radius:2vw;
+    font-size:6vw;
+    background:black;
+    color:#6fbaff;
+    margin-top:3vh;
+    box-shadow:0 0 4vw #6fbaff;
   }
 
 </style>
@@ -128,11 +140,13 @@
 
 <body>
 
+<!-- START SCREEN -->
 <div id="start-screen">
   <div id="start-logo">SPACE TETRIS</div>
   <div id="startBtn">START</div>
 </div>
 
+<!-- GAME CONTAINER -->
 <div id="game-container">
 
   <div id="ui">
@@ -151,42 +165,43 @@
   </div>
 </div>
 
+<!-- GAME OVER SCREEN -->
 <div id="gameover-screen">
-  <div style="font-size: 48px; letter-spacing: 4px; margin-bottom: 20px;">GAME OVER</div>
-
-  <div style="font-size: 22px;">Score: <span id="final-score"></span></div>
-  <div style="font-size: 22px;">Level: <span id="final-level"></span></div>
-  <div style="font-size: 22px; margin-bottom: 30px;">Time: <span id="final-time"></span>s</div>
-
+  <div style="font-size:10vw; margin-bottom:3vh; letter-spacing:1vw;">GAME OVER</div>
+  <div style="font-size:5vw;">Score: <span id="final-score"></span></div>
+  <div style="font-size:5vw;">Level: <span id="final-level"></span></div>
+  <div style="font-size:5vw; margin-bottom:4vh;">Time: <span id="final-time"></span>s</div>
   <div id="restartBtn">RESTART</div>
 </div>
 
 <script>
+/* =============== START CLICK =============== */
 document.getElementById("startBtn").onclick = () => {
-    document.getElementById("start-screen").style.display = "none";
-    document.getElementById("game-container").style.display = "flex";
-    startGame();
+  document.getElementById("start-screen").style.display="none";
+  document.getElementById("game-container").style.display="flex";
+  startGame();
 };
 
+/* =============== GAME LOGIC =============== */
 let canvas, ctx;
 let gridW=10, gridH=20, block=30;
 let score=0, level=1, time=0;
-let grid, shapes, colors, piece, px, py;
+let grid, piece, px, py;
 let last=0, drop=0, paused=true;
+
+const shapes=[
+  [[1,1,1,1]],
+  [[1,1],[1,1]],
+  [[0,1,0],[1,1,1]],
+  [[1,0],[1,0],[1,1]],
+  [[0,1],[0,1],[1,1]]
+];
+
+const colors=["#6fbaff","#94ccff","#c7e5ff","#ffffff"];
 
 function startGame(){
   canvas=document.getElementById("tetris");
   ctx=canvas.getContext("2d");
-
-  shapes=[
-    [[1,1,1,1]],
-    [[1,1],[1,1]],
-    [[0,1,0],[1,1,1]],
-    [[1,0],[1,0],[1,1]],
-    [[0,1],[0,1],[1,1]]
-  ];
-
-  colors=["#6fbaff","#94ccff","#c7e5ff","#ffffff"];
 
   initGrid();
   newPiece();
@@ -201,22 +216,34 @@ function startGame(){
   },1000);
 }
 
-function initGrid(){ grid=Array(gridH).fill().map(()=>Array(gridW).fill(0)); }
+function initGrid(){
+  grid=Array(gridH).fill().map(()=>Array(gridW).fill(0));
+}
 
-function newPiece(){ piece=shapes[Math.random()*shapes.length|0]; px=3; py=0; }
+function newPiece(){
+  piece=shapes[Math.random()*shapes.length|0];
+  px=3; py=0;
+}
 
-function rotate(p){ return p[0].map((_,i)=>p.map(r=>r[i]).reverse()); }
+function rotate(p){
+  return p[0].map((_,i)=>p.map(r=>r[i]).reverse());
+}
 
 function collides(nx,ny,p){
   for(let y=0;y<p.length;y++){
     for(let x=0;x<p[y].length;x++){
-      if(p[y][x]&&(nx+x<0||nx+x>=gridW||ny+y>=gridH||grid[ny+y][nx+x])) return true;
+      if(p[y][x] &&
+        (nx+x<0||nx+x>=gridW||ny+y>=gridH||grid[ny+y][nx+x])) return true;
     }
   }
   return false;
 }
 
-function merge(){ piece.forEach((r,y)=>r.forEach((v,x)=>{ if(v) grid[py+y][px+x]=1; })); }
+function merge(){
+  piece.forEach((r,y)=>r.forEach((v,x)=>{
+    if(v) grid[py+y][px+x]=1;
+  }));
+}
 
 function clearLines(){
   for(let y=gridH-1;y>=0;y--){
@@ -233,7 +260,7 @@ function clearLines(){
 
 let stars=[];
 for(let i=0;i<80;i++){
-  stars.push({x:Math.random()*600, y:Math.random()*600, s:Math.random()*2, sp:0.4+Math.random()*0.5});
+  stars.push({x:Math.random()*300,y:Math.random()*600,s:Math.random()*2,sp:0.4+Math.random()*0.5});
 }
 
 function drawStars(){
@@ -242,21 +269,23 @@ function drawStars(){
     ctx.globalAlpha=0.3;
     ctx.fillRect(s.x,s.y,s.s,s.s);
     s.y+=s.sp;
-    if(s.y>canvas.height){ s.y=0; s.x=Math.random()*canvas.width; }
+    if(s.y>600){s.y=0; s.x=Math.random()*300;}
   }
   ctx.globalAlpha=1;
 }
 
 function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.clearRect(0,0,300,600);
   drawStars();
 
-  for(let y=0;y<gridH;y++)
-    for(let x=0;x<gridW;x++)
+  for(let y=0;y<gridH;y++){
+    for(let x=0;x<gridW;x++){
       if(grid[y][x]){
         ctx.fillStyle=colors[(x+y)%4];
         ctx.fillRect(x*block,y*block,block-1,block-1);
       }
+    }
+  }
 
   piece.forEach((r,y)=>
     r.forEach((v,x)=>{
@@ -277,7 +306,8 @@ function update(t){
   drop+=d;
 
   if(drop > 900 - level*60){
-    py++; drop=0;
+    py++;
+    drop=0;
 
     if(collides(px,py,piece)){
       py--;
@@ -286,7 +316,7 @@ function update(t){
       newPiece();
 
       if(collides(px,py,piece)){
-        showGameOver();
+        gameOver();
         return;
       }
     }
@@ -294,24 +324,23 @@ function update(t){
   draw();
 }
 
-function showGameOver(){
+function gameOver(){
   paused=true;
-
   document.getElementById("final-score").textContent=score;
   document.getElementById("final-level").textContent=level;
   document.getElementById("final-time").textContent=time;
-
   document.getElementById("gameover-screen").style.display="flex";
 }
 
-document.getElementById("restartBtn").onclick = () => {
-  location.reload();
-};
+/* =============== RESTART BUTTON =============== */
+document.getElementById("restartBtn").onclick = ()=>location.reload();
 
-left.onclick=()=>{ if(!collides(px-1,py,piece)) px--; };
-right.onclick=()=>{ if(!collides(px+1,py,piece)) px++; };
-rotate.onclick=()=>{ let r=rotate(piece); if(!collides(px,py,r)) piece=r; };
-down.onclick=()=>{ py++; if(collides(px,py,piece)) py--; };
+/* =============== TOUCH CONTROLS =============== */
+left.onclick = () => { if(!collides(px-1,py,piece)) px--; };
+right.onclick = () => { if(!collides(px+1,py,piece)) px++; };
+rotate.onclick = () => { let r=rotate(piece); if(!collides(px,py,r)) piece=r; };
+down.onclick = () => { py++; if(collides(px,py,piece)) py--; };
+
 </script>
 
 </body>
