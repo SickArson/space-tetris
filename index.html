@@ -1,143 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, minimum-scale=1">
+  <title>Space Tetris – Responsive Edition</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
 
-<title>Space Tetris – Responsive Edition</title>
+    body {
+      background:black;
+      font-family:Arial, sans-serif;
+      overflow:hidden;
+      height:100vh;
+      width:100vw;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-<style>
-  /* RESET */
-  * { margin:0; padding:0; box-sizing:border-box; }
+    #start-screen {
+      position:absolute;
+      inset:0;
+      background:radial-gradient(#020617,#000);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      z-index:10;
+    }
 
-  body {
-    background:black;
-    font-family:Arial, sans-serif;
-    overflow:hidden;
-    height:100vh;
-    width:100vw;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-  }
+    #start-logo {
+      font-size:8vw;
+      color:#6fbaff;
+      text-shadow:0 0 8px #6fbaff,0 0 18px #3d7bff;
+      letter-spacing:0.8vw;
+      margin-bottom:4vh;
+    }
 
-  /* ---------------- START SCREEN ---------------- */
-  #start-screen {
-    position:absolute;
-    inset:0;
-    background:radial-gradient(#020617,#000);
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    z-index:10;
-  }
+    #startBtn {
+      padding:3vw 7vw;
+      border:0.8vw solid #6fbaff;
+      border-radius:2vw;
+      font-size:6vw;
+      text-align:center;
+      color:#6fbaff;
+      background:black;
+      box-shadow:0 0 4vw #6fbaff;
+    }
 
-  #start-logo {
-    font-size:8vw;
-    color:#6fbaff;
-    text-shadow:0 0 8px #6fbaff,0 0 18px #3d7bff;
-    letter-spacing:0.8vw;
-    margin-bottom:4vh;
-  }
+    #game-container {
+      display:none;
+      flex-direction:column;
+      align-items:center;
+      width:100vw;
+      height:100vh;
+      padding-top:2vh;
+    }
 
-  #startBtn {
-    padding:3vw 7vw;
-    border:0.8vw solid #6fbaff;
-    border-radius:2vw;
-    font-size:6vw;
-    text-align:center;
-    color:#6fbaff;
-    background:black;
-    box-shadow:0 0 4vw #6fbaff;
-  }
+    #ui {
+      font-size:4vw;
+      margin-bottom:1vh;
+      color:white;
+      text-align:center;
+    }
 
-  /* ---------------- GAME CONTAINER ---------------- */
-  #game-container {
-    display:none;
-    flex-direction:column;
-    align-items:center;
-    width:100vw;
-    height:100vh;
-    padding-top:2vh;
-  }
+    #tetris {
+      width:90vw;
+      max-width:430px;
+      aspect-ratio:1/2;
+      border:0.8vw solid #6fbaff;
+      background:black;
+      box-shadow:0 0 3vw #6fbaff;
+      touch-action:none;
+    }
 
-  /* SCORE UI */
-  #ui {
-    font-size:4vw;
-    margin-bottom:1vh;
-    color:white;
-    text-align:center;
-  }
+    #controls {
+      display:flex;
+      justify-content:center;
+      gap:4vw;
+      margin-top:2vh;
+      padding-bottom:3vh;
+    }
 
-  /* CANVAS RESPONSIVE */
-  #tetris {
-    width:90vw;
-    max-width:430px;
-    aspect-ratio:1/2; /* 🔥 Magic responsiveness */
-    border:0.8vw solid #6fbaff;
-    background:black;
-    box-shadow:0 0 3vw #6fbaff;
-  }
+    .control-btn {
+      width:14vw;
+      height:14vw;
+      max-width:80px;
+      max-height:80px;
+      background:#111;
+      border:0.8vw solid #6fbaff;
+      border-radius:2vw;
+      font-size:7vw;
+      color:#6fbaff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      user-select:none;
+      box-shadow:0 0 3vw #6fbaff;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-  /* ---------------- TOUCH CONTROLS ---------------- */
-  #controls {
-    display:flex;
-    justify-content:center;
-    gap:4vw;
-    margin-top:2vh;
-  }
+    .control-btn:active {
+      transform:scale(0.92);
+      filter:brightness(1.4);
+    }
 
-  .control-btn {
-    width:14vw;
-    height:14vw;
-    max-width:80px;
-    max-height:80px;
-    background:#111;
-    border:0.8vw solid #6fbaff;
-    border-radius:2vw;
-    font-size:7vw;
-    color:#6fbaff;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    user-select:none;
-    box-shadow:0 0 3vw #6fbaff;
-  }
+    #fullscreenBtn {
+      font-size:5vw;
+      width:12vw;
+      height:12vw;
+      max-width:70px;
+      max-height:70px;
+      margin-top:2vh;
+    }
 
-  .control-btn:active {
-    transform:scale(0.92);
-    filter:brightness(1.4);
-  }
+    #gameover-screen {
+      position:absolute;
+      inset:0;
+      background:radial-gradient(#000428,#004e92);
+      display:none;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      z-index:20;
+      text-shadow:0 0 8px #6fbaff;
+    }
 
-  /* ---------------- GAME OVER SCREEN ---------------- */
-  #gameover-screen {
-    position:absolute;
-    inset:0;
-    background:radial-gradient(#000428,#004e92);
-    display:none;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    z-index:20;
-    text-shadow:0 0 8px #6fbaff;
-  }
-
-  #restartBtn {
-    padding:3vw 7vw;
-    border:0.8vw solid #6fbaff;
-    border-radius:2vw;
-    font-size:6vw;
-    background:black;
-    color:#6fbaff;
-    margin-top:3vh;
-    box-shadow:0 0 4vw #6fbaff;
-  }
-
-</style>
+    #restartBtn {
+      padding:3vw 7vw;
+      border:0.8vw solid #6fbaff;
+      border-radius:2vw;
+      font-size:6vw;
+      background:black;
+      color:#6fbaff;
+      margin-top:3vh;
+      box-shadow:0 0 4vw #6fbaff;
+    }
+  </style>
 </head>
-
 <body>
 
 <!-- START SCREEN -->
@@ -148,14 +150,13 @@
 
 <!-- GAME CONTAINER -->
 <div id="game-container">
-
   <div id="ui">
     Score: <span id="score">0</span> |
     Level: <span id="level">1</span> |
     Time: <span id="time">0</span>s
   </div>
 
-  <canvas id="tetris" width="300" height="600"></canvas>
+  <canvas id="tetris"></canvas>
 
   <div id="controls">
     <div class="control-btn" id="left">⬅️</div>
@@ -163,6 +164,8 @@
     <div class="control-btn" id="right">➡️</div>
     <div class="control-btn" id="down">⬇️</div>
   </div>
+
+  <div id="fullscreenBtn" class="control-btn">⛶</div>
 </div>
 
 <!-- GAME OVER SCREEN -->
@@ -175,16 +178,14 @@
 </div>
 
 <script>
-/* =============== START CLICK =============== */
 document.getElementById("startBtn").onclick = () => {
   document.getElementById("start-screen").style.display="none";
   document.getElementById("game-container").style.display="flex";
   startGame();
 };
 
-/* =============== GAME LOGIC =============== */
 let canvas, ctx;
-let gridW=10, gridH=20, block=30;
+let gridW=10, gridH=20, block;
 let score=0, level=1, time=0;
 let grid, piece, px, py;
 let last=0, drop=0, paused=true;
@@ -200,20 +201,25 @@ const shapes=[
 const colors=["#6fbaff","#94ccff","#c7e5ff","#ffffff"];
 
 function startGame(){
-  canvas=document.getElementById("tetris");
-  ctx=canvas.getContext("2d");
+  canvas = document.getElementById("tetris");
+  ctx = canvas.getContext("2d");
+
+  // Make canvas match visual size
+  canvas.width = canvas.getBoundingClientRect().width;
+  canvas.height = canvas.width * 2;
+  block = canvas.width / gridW;
 
   initGrid();
   newPiece();
-  paused=false;
+  paused = false;
   update(0);
 
-  setInterval(()=>{
-    if(!paused){
+  setInterval(() => {
+    if (!paused) {
       time++;
-      document.getElementById("time").textContent=time;
+      document.getElementById("time").textContent = time;
     }
-  },1000);
+  }, 1000);
 }
 
 function initGrid(){
@@ -269,13 +275,13 @@ function drawStars(){
     ctx.globalAlpha=0.3;
     ctx.fillRect(s.x,s.y,s.s,s.s);
     s.y+=s.sp;
-    if(s.y>600){s.y=0; s.x=Math.random()*300;}
+    if(s.y>canvas.height){s.y=0; s.x=Math.random()*canvas.width;}
   }
   ctx.globalAlpha=1;
 }
 
 function draw(){
-  ctx.clearRect(0,0,300,600);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
   drawStars();
 
   for(let y=0;y<gridH;y++){
@@ -332,16 +338,56 @@ function gameOver(){
   document.getElementById("gameover-screen").style.display="flex";
 }
 
-/* =============== RESTART BUTTON =============== */
 document.getElementById("restartBtn").onclick = ()=>location.reload();
 
-/* =============== TOUCH CONTROLS =============== */
+// TOUCH CONTROLS
 left.onclick = () => { if(!collides(px-1,py,piece)) px--; };
 right.onclick = () => { if(!collides(px+1,py,piece)) px++; };
 rotate.onclick = () => { let r=rotate(piece); if(!collides(px,py,r)) piece=r; };
 down.onclick = () => { py++; if(collides(px,py,piece)) py--; };
 
-</script>
+// TOUCH SWIPE
+let touchStartX = 0, touchStartY = 0;
+canvas.addEventListener("touchstart", (e) => {
+  const t = e.touches[0];
+  touchStartX = t.clientX;
+  touchStartY = t.clientY;
+});
+canvas.addEventListener("touchend", (e) => {
+  const t = e.changedTouches[0];
+  const dx = t.clientX - touchStartX;
+  const dy = t.clientY - touchStartY;
 
+  if (Math.abs(dx) > Math.abs(dy)) {
+    if (dx > 20) right.onclick();
+    else if (dx < -20) left.onclick();
+  } else {
+    if (dy > 20) down.onclick();
+    else if (dy < -20) rotate.onclick();
+  }
+});
+
+// FULLSCREEN TOGGLE
+document.getElementById("fullscreenBtn").onclick = () => {
+  const elem = document.documentElement;
+  if (!document.fullscreenElement) {
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+      elem.msRequestFullscreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  }
+};
+</script>
 </body>
 </html>
