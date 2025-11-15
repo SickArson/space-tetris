@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Space Tetris Deluxe</title>
+<style>
+  body { margin:0; background:#000; font-family:Arial; overflow:hidden; }
+  #game-container { width:100vw; height:100vh; display:flex; align-items:center; justify-content:center; position:relative; }
+  canvas { background:#000; border:4px solid #f2a42d; }
+  #ui { position:absolute; top:20px; left:20px; color:white; font-size:20px; }
+  #astronaut { position:absolute; bottom:20px; right:20px; width:120px; }
+</style>
+</head>
+<body>
+<div id='game-container'>
+  <canvas id='tetris' width='300' height='600'></canvas>
+  <div id='ui'>
+    <div>Score: <span id='score'>0</span></div>
+    <div>Level: <span id='level'>1</span></div>
+    <div>Time: <span id='time'>0</span>s</div>
+  </div>
+  <img id='astronaut' src='https://i.imgur.com/yy1Oe8y.png'>
+</div>
+
+<script>
+const canvas=document.getElementById('tetris');
+const ctx=canvas.getContext('2d');
+const scoreEl=document.getElementById('score');
+const levelEl=document.getElementById('level');
+const timeEl=document.getElementById('time');
+const astronaut=document.getElementById('astronaut');
+
+const blockSize=30, gridW=10, gridH=20;
+const colors=['#ff6b6b','#4ecdc4','#ffe66d','#5f27cd','#48dbfb','#f2a42d','#1dd1a1'];
+const shapes=[
+  [[1,1,1,1]],
+  [[1,1],[1,1]],
+  [[0,1,0],[1,1,1]],
+  [[1,0],[1,0],[1,1]],
+  [[0,1],[0,1],[1,1]]
+];
+
+let grid=Array(gridH).fill().map(()=>Array(gridW).fill(0));
+let piece, px, py, score=0, level=1, timer=0;
+
+function newPiece(){ piece=shapes[Math.floor(Math.random()*shapes.length)]; px=3; py=0; }
+function rotate(p){ return p[0].map((_,i)=>p.map(r=>r[i]).reverse()); }
+
+function collides(nx,ny,np){
+  for(let y=0;y<np.length;y++){
+    for(let x=0;x<np[y].length;x++){
+      if(np[y][x] && (nx+x<0||nx+x>=gridW||ny+y>=gridH||grid[ny+y][nx+x])) return true;
+    }
+  }
+  return false;
+}
+
+function merge(){
+  piece.forEach((r,y)=>r.forEach((v,x)=>{ if(v) grid[py+y][px+x]=1; }));
+}
+
+function clearLines(){
+  for(let y=gridH-1;y>=0;y--){
+    if(grid[y].every(v=>v)){
+      grid.splice(y,1);
+      grid.unshift(Array(gridW).fill(0));
+      score+=100;
+      level=Math.floor(score/500)+1;
+      astronaut.style.transform='scale(1.15)';
+      setTimeout(()=>astronaut.style.transform='',150);
+    }
+  }
+  scoreEl.textContent=score;
+  levelEl.textContent=level;
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let y=0;y<gridH;y++){
+    for(let x=0;x<gridW;x++){
+      if(grid[y][x]){
+        ctx.fillStyle=colors[(x+y)%colors.length];
+        ctx.fillRect(x*blockSize,y*blockSize,blockSize-1,blockSize-1);
+      }
+    }
+  }
+  piece.forEach((r,y)=>r.forEach((v,x)=>{ if(v){ ctx.fillStyle=colors[(x+y)%colors.length]; ctx.fillRect((px+x)*blockSize,(py+y)*blockSize,blockSize-1,blockSize-1); }}));
+}
+
+let dropCounter=0,last=0;
+
+function update(ms){
+  requestAnimationFrame(update);
+  const delta=ms-last; last=ms;
+  dropCounter+=delta;
+  if(dropCounter>900-level*60){
+    py++; dropCounter=0;
+    if(collides(px,py,piece)){
+      py--; merge(); clearLines(); newPiece();
+      if(collides(px,py,piece)){ alert('GAME OVER! Score: '+score); location.reload(); }
+    }
+  }
+  draw();
+}
+
+newPiece(); update(0);
+setInterval(()=>{ timer++; timeEl.textContent=timer; },1000);
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'&&!collides(px-1,py,piece)) px--;
+  if(e.key==='ArrowRight'&&!collides(px+1,py,piece)) px++;
+  if(e.key==='ArrowUp'){ let r=rotate(piece); if(!collides(px,py,r)) piece=r; }
+  if(e.key==='ArrowDown'){ py++; if(collides(px,py,piece)) py--; }
+});
+</script>
+</body>
+</html>
