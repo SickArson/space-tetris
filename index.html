@@ -121,7 +121,34 @@
       justify-content: center;
       gap: 10px;
     }
-  </style>
+  
+    @media (max-width: 600px) {
+      #tetris {
+        width: 90vw;
+        height: auto;
+      }
+
+      #next {
+        width: 12vw;
+        height: 12vw;
+      }
+
+      .btn {
+        font-size: 1em;
+        padding: 8px 14px;
+      }
+
+      #scorebar {
+        font-size: 0.95em;
+      }
+    }
+
+    canvas {
+      max-width: 100%;
+      height: auto;
+    }
+
+</style>
 </head>
 <body>
 <div id="main-container">
